@@ -2018,7 +2018,7 @@ namespace APICallScheduler.Controllers
                     try
                     {
                         HDFCERGOStatusUpdateApiModel dataModel = new HDFCERGOStatusUpdateApiModel();
-                        //dataModel.InsuredDetailId = model.InsuredDetailId;
+                        dataModel.InsuredDetailId = model.InsuredDetailId;
                         // dataModel.CallDatetime = model.CallDatetime;
                         dataModel.CallerUsername = model.CallerUsername;
                         dataModel.CallRemarks = model.CallRemarks;
@@ -2093,7 +2093,7 @@ namespace APICallScheduler.Controllers
                     try
                     {
                         HDFCERGOStatusUpdateApiModel dataModel = new HDFCERGOStatusUpdateApiModel();
-                        //dataModel.InsuredDetailId = model.InsuredDetailId;
+                        dataModel.InsuredDetailId = model.InsuredDetailId;
                         // dataModel.CallDatetime = model.CallDatetime;
                         dataModel.CallerUsername = RemoveSpecialCharacterHDFCERGO(model.CallerUsername);
                         dataModel.CallRemarks = RemoveSpecialCharacterHDFCERGO(model.CallRemarks);

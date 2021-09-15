@@ -140,14 +140,14 @@ namespace APICallScheduler.Models
     public class HDFCERGOStatusUpdate
     {
 
-        public int AppointmentLogId { get; set; }
-        public int AppointmentId { get; set; }
+        public Int32 AppointmentLogId { get; set; }
+        public Int32 AppointmentId { get; set; }
          public DateTime AppointmentDate { get; set; }
         public DateTime AppointmentTime { get; set; }
         public string StatusUpdatedTime { get; set; }
         public string AppointmentCode { get; set; }
-        public int AppointmentStatusId { get; set; }
-        //public int InsuredDetailId { get; set; }
+        public Int32 AppointmentStatusId { get; set; }
+        public Int32 InsuredDetailId { get; set; }
         public string CallDatetime { get; set; }
         public string CallStatusName { get; set; }
         public string CallRemarks { get; set; }
@@ -219,7 +219,7 @@ namespace APICallScheduler.Models
 
     public class HDFCERGOStatusUpdateApiModel
     {
-        public int InsuredDetailId { get; set; }
+        public Int32 InsuredDetailId { get; set; }
         public string CallDatetime { get; set; }
         //public string AppointmentCode { get; set; }
         public string CallStatusName { get; set; }
