@@ -1656,7 +1656,6 @@ namespace APICallScheduler.Controllers
 
         #region added by Wamik HDFCERGODigitalMerForm
         public void HDFCERGODigitalMerForm()
-
         {
             string data = string.Empty;
             string json = string.Empty;
