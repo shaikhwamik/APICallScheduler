@@ -2156,6 +2156,91 @@ namespace APICallScheduler.Controllers
 
         #endregion
 
+        #region Added by Mayuri for Medical & Vendor Tele Video Integration
+
+        public string GetTokenForAuth()
+        {
+
+            var json = string.Empty;
+            List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+
+            AuthDataModel _Authdatamodel = new AuthDataModel();
+            _Authdatamodel.grantType = "client_credentials";
+            _Authdatamodel.clientInfo = "MW9MSGR6WnEwbXByTjZ1Z0xlUW5GMWJla01VYTpnWjdmR3BLOURHMlRmV2E3Vlcycl95M1JRRmdh";
+            string authdata = string.Empty;
+            authdata = JsonConvert.SerializeObject(_Authdatamodel);
+
+            List<KeyValuePair<string, string>> headersauth = new List<KeyValuePair<string, string>>();
+            string authEndPoint = @"https://kliapiuat.mykotaklife.com/custom/1.0.0/auth";
+            headersauth.Add(new KeyValuePair<string, string>("grantType", _Authdatamodel.grantType));
+            headersauth.Add(new KeyValuePair<string, string>("clientInfo", _Authdatamodel.clientInfo));
+
+            var clientAuth = new WebService.RestClient("application/json", authEndPoint, APICallScheduler.Common.HttpVerb.POST, authdata, headersauth);
+            
+            json = clientAuth.MakeRequest();
+            authdata = authdata.Replace("'", "\\'");
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            AUthorizationModelResponse aUthorizationModelResponse = new AUthorizationModelResponse();
+            aUthorizationModelResponse = new JavaScriptSerializer().Deserialize<AUthorizationModelResponse>(json);
+
+
+            string SecureToken = aUthorizationModelResponse.access_token;
+
+            return SecureToken;
+        }
+
+        public void GetTPARecordStatus()
+        {
+            BaseBLL baseBLL = new BaseBLL();
+            try
+            {
+                string endPoint = @"https://kliapiuat.mykotaklife.com/gettpastatus/v1.0.0/GetTPAStatus";
+             
+                List<TPAInformation> List = SBLL.GetTELEAppointmentDetails();
+
+                foreach (var model in List)
+                {
+                    TPAInformationModel dataModel = new TPAInformationModel();
+                    
+                    dataModel.MAHSRequestId = model.MAHSRequestId;
+                    dataModel.TestCategory = model.TestCategory;
+                    dataModel.TPAStatus = model.TPAStatus;
+                   
+                    List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
+                    headers.Add(new KeyValuePair<string, string>("grantType", "client_credentials"));
+                    headers.Add(new KeyValuePair<string, string>("clientInfo", "MW9MSGR6WnEwbXByTjZ1Z0xlUW5GMWJla01VYTpnWjdmR3BLOURHMlRmV2E3Vlcycl95M1JRRmdh"));
+                    headers.Add(new KeyValuePair<string, string>("Authorization", "Bearer " + GetTokenForAuth()));
+
+                    string data = JsonConvert.SerializeObject(dataModel);
+                    var json = "";
+                    var client = new WebService.RestClient("application/json", endPoint, APICallScheduler.Common.HttpVerb.POST, data, headers);
+                    for (int i = 0; i < 5; i++)
+                    
+                    {
+                        try
+                        {
+                            json = client.MakeRequest();
+                            break;
+                        }
+                        catch (Exception ex)
+                        {
+                            throw ex;
+                        }
+                    }
+                    data = data.Replace("'", "\\'");
+                    json = json.Replace("'", "\\'");
+                    SBLL.SaveServiceRequest("TELE Health Insurance", "", "", "GetTPAStatus", model.MAHSRequestId.ToString(), "AppointmentId", "JSON", data, "JSON", json, "SERVICE", null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
 
     }
 }
+
+   
