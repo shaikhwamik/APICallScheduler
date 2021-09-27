@@ -553,7 +553,18 @@ namespace APICallScheduler.Models
         public string PolicyRefNo { get; set; }
 
     }
-
+    public class TPAInformation
+    {
+        public int MAHSRequestId { get; set; }
+        public string TestCategory { get; set; }
+        public string TPAStatus { get; set; }
+    }
+    public class TPAInformationModel
+    {
+        public int MAHSRequestId { get; set; }
+        public string TestCategory { get; set; }
+        public string TPAStatus { get; set; }
+    }
     public class ApttTestDetails
     {
         public long AppointmentId { get; set; }
@@ -904,11 +915,19 @@ namespace APICallScheduler.Models
     public class AuthorizationDataModel
     {
         public string userName { get; set; }
-        public string userPassword { get; set; }        
-
+        public string userPassword { get; set; }  
+               
+     
     }
 
- 
+    public class AuthDataModel
+    {
+        public string grantType { get; set; }
+
+        public string clientInfo { get; set; }
+    }
+
+
     public class UserInfo
     {
         public int UserId { get; set; }
@@ -969,6 +988,13 @@ namespace APICallScheduler.Models
         public int ResponseType { get; set; }
         public object Name { get; set; }
         public object MessageCode { get; set; }
+        public object clainsString { get; set; }
+        public string access_token { get; set; }
+        public object refresh_token { get; set; }
+        public string scope { get; set; }
+        public string token_type { get; set; }
+        public int expires_in { get; set; }
+
     }
 
 
