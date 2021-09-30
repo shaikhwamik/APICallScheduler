@@ -775,6 +775,33 @@ namespace APICallScheduler.DAL
             }
         }
 
-        
+        public DataTable GetTELEAppointmentDetails()
+        {
+
+
+            SqlCommand cmd;
+            DataTable dt = new DataTable();
+            SqlDataAdapter dap;
+            try
+            {
+                SqlConnection MyConn = objCommon.GetConnection();
+                cmd = new SqlCommand("uspGetTPAStatus", MyConn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandTimeout = 50000;
+                dap = new SqlDataAdapter(cmd);
+                dap.Fill(dt);
+            }
+
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                objCommon.CloseConnection();
+            }
+            return dt;
+        }
+
     }
 }
