@@ -775,5 +775,61 @@ namespace APICallScheduler.DAL
             }
         }
 
+        public DataTable GetTELEAppointmentDetails()
+        {
+
+
+            SqlCommand cmd;
+            DataTable dt = new DataTable();
+            SqlDataAdapter dap;
+            try
+            {
+                SqlConnection MyConn = objCommon.GetConnection();
+                cmd = new SqlCommand("uspGetTPAStatus", MyConn);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandTimeout = 50000;
+                dap = new SqlDataAdapter(cmd);
+                dap.Fill(dt);
+            }
+
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                objCommon.CloseConnection();
+            }
+            return dt;
+        }
+
+       
+        public string GetTELEAppointmentDetails(TPAInformationModel model)
+        {
+            SqlCommand cmd;
+            DataTable dt = new DataTable();
+            try
+            {
+                SqlConnection MyConn = objCommon.GetConnection();
+                cmd = new SqlCommand("uspGetTPAStatus", MyConn);
+                cmd.Parameters.Add("@AppointmetID", SqlDbType.VarChar).Value = model.MAHSRequestId;
+                cmd.Parameters.Add("@TestType", SqlDbType.VarChar).Value = model.TestCategory;
+                cmd.Parameters.Add("@Status", SqlDbType.VarChar).Value = model.TPAStatus;
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.CommandTimeout = 50000;
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                
+                da.Fill(dt);
+                cmd.ExecuteNonQuery();
+            }
+            catch
+            {
+            }
+            finally
+            {
+                objCommon.CloseConnection();
+            }
+            return dt.Columns[0].ToString();
+        }
     }
 }
