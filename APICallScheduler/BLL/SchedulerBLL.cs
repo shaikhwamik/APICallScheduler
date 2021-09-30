@@ -303,7 +303,8 @@ namespace APICallScheduler.BLL
                             //DCName = x.Field<string>("ProviderName"),
                             // DCAddress2 =x.Field<string>("ProviderAddress"),
                             // DCAddress3=x.Field<string>("ProviderAddress"),
-                             InsuredDetailId= Convert.ToInt32(dr["AppointmentId"]),
+
+                             InsuredDetailId=Convert.ToInt32(dr["ClientRefId"]),
                               
                             DCAddress1 = dr["ProviderAddress"].ToString(),
                             DCCity = dr["ProviderCity"].ToString(),
@@ -350,7 +351,7 @@ namespace APICallScheduler.BLL
                             DCName = dr["name"].ToString(),
                             // DCAddress2 =x.Field<string>("ProviderAddress"),
                             // DCAddress3=x.Field<string>("ProviderAddress"),
-                             InsuredDetailId= Convert.ToInt32(dr["AppointmentId"]),
+                             InsuredDetailId= Convert.ToInt32(dr["ProposerReferenceId"]),
                             
                             DCAddress1 = dr["ProviderAddress"].ToString(),
                             DCCity = dr["ProviderCity"].ToString(),

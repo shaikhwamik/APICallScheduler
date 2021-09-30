@@ -1684,8 +1684,8 @@ namespace APICallScheduler.Controllers
                     // AppointmentId = apptdetails.appointmentId.ToString();
 
 
-                    _HDFCERGODigitalInformation.appointmentId = Convert.ToString(apptdetails.AppointmentId);//AppointmentId; //"3250000111";
-                    _HDFCERGODigitalInformation.PolicyRefNo = apptdetails.PolicyRefNo;
+                    _HDFCERGODigitalInformation.InsuredDetailId = apptdetails.ProposerReferenceId;//AppointmentId; //"3250000111";
+                   // _HDFCERGODigitalInformation.PolicyRefNo = apptdetails.PolicyRefNo;
                     apptdetails.FileName = "D://AMHI00106790.pdf";
                     if (System.IO.File.Exists(apptdetails.FileName))
                     {
@@ -1810,13 +1810,12 @@ namespace APICallScheduler.Controllers
         #endregion
 
         #region Added by Wamik HDFCERGOTELEMerForm
-        public void HDFCERGOTELEMerForm()
+        public void HDFCERGOTELEMerForm( )
         {
             string data = string.Empty;
             string json = string.Empty;
-            //AppointmentQueryBLL AptBLL = new AppointmentQueryBLL();
             BaseBLL baseBLL = new BaseBLL();
-            string AppointmentId = "";
+            string TeleProposerId = "";
             string BusinessCorelationId = "";
             try
             {
@@ -1834,74 +1833,54 @@ namespace APICallScheduler.Controllers
 
                 foreach (var apptdetails in model.Filelst)
                 {
-
-                    // AppointmentId = apptdetails.appointmentId.ToString();
-
-
-                    _HDFCERGODigitalInformation.appointmentId = Convert.ToString(apptdetails.AppointmentId);//AppointmentId; //"3250000111";
-                    _HDFCERGODigitalInformation.PolicyRefNo = apptdetails.PolicyRefNo;
-                    apptdetails.FileName = "D://AMHI00106790.pdf";
-                    if (System.IO.File.Exists(apptdetails.FileName))
+                    _HDFCERGODigitalInformation.InsuredDetailId = apptdetails.ProposerReferenceId;
+                    string tempFilePath = BBLL.GetSystemCodePath("FILESAVEPATH", "TELEPHOTOSAVE");
+                    var sourcePath = System.IO.Path.Combine(tempFilePath, apptdetails.FileSavePath);
+                    // apptdetails.FileName = "D://AMHI00106790.pdf";                                            
+                    if (System.IO.File.Exists(sourcePath))
                     {
-                        _HDFCERGODigitalInformation.FileName = System.IO.Path.GetFileName(apptdetails.FileName);
-                        //_HDFCERGODigitalInformation.FileContent = Convert.ToBase64String(System.IO.File.ReadAllBytes(apptdetails.FileName));
+                        _HDFCERGODigitalInformation.FileName = apptdetails.file_name; 
+                        _HDFCERGODigitalInformation.FileContent = Convert.ToBase64String(System.IO.File.ReadAllBytes(sourcePath));
                     }
-
-
                     List<DiagnosisDetails> listdiagnosisDetails = new List<DiagnosisDetails>();
                     List<FeedbackQuestionsMER> FeedbackQuestionsMERlst = new List<FeedbackQuestionsMER>();
                     List<MerDtAnswerResponses> _MerDtAnswerResponses = new List<MerDtAnswerResponses>();
-                    foreach (var item in model.feedbackMERQuestionAnswerlst.Where(m => m.AppointmentId == apptdetails.AppointmentId))
+                    foreach (var item in model.feedbackMERQuestionAnswerlst.Where(m => m.TeleProposerId == apptdetails.TeleProposerId))
                     {
 
-                        //List<MerDtAnswerResponses> _MerDtAnswerResponses = new List<MerDtAnswerResponses>();
+                       
                         MerDtAnswerResponses merDtAnswerResponses = new MerDtAnswerResponses();
 
-                        merDtAnswerResponses.QuestionRefCode = Convert.ToString(item.QueId);
-                        merDtAnswerResponses.QuestionTitle = item.Question;
-                        merDtAnswerResponses.ResponseRemarks = item.Details;
-                        merDtAnswerResponses.ResponseStatus = item.Answer;
-                        _MerDtAnswerResponses.Add(merDtAnswerResponses);
-
-
-                    }
-                    MerDtAnswerResponses merdtAnswerResponses = new MerDtAnswerResponses();
-                    // List<DiagnosisDetails> listdiagnosisDetails = new List<DiagnosisDetails>();
-                    if (merdtAnswerResponses.ResponseStatus == "Y")
-                    {
-                        foreach (var QueId in model.feedbackMERQuestionAnswerlst.Where(m => m.AppointmentId == apptdetails.AppointmentId))
+                        merDtAnswerResponses.QuestionRefCode = Convert.ToString(item.MainQueClientCode);
+                        merDtAnswerResponses.QuestionTitle = item.QuestionsName;
+                        merDtAnswerResponses.ResponseRemarks = item.Answer;
+                        merDtAnswerResponses.ResponseStatus = item.HasSubQue;
+                        if (merDtAnswerResponses.ResponseStatus == "Y")
                         {
-                            DiagnosisDetails _diagnosisDetails = new DiagnosisDetails();
 
+                            if (item.MainQueId != 0)
+                            {
+                                merDtAnswerResponses.QuestionRefCode = Convert.ToString(item.MainQueClientCode);
+                                merDtAnswerResponses.QuestionTitle = item.QuestionsName;
+                                merDtAnswerResponses.ResponseRemarks = item.Answer;
+                                merDtAnswerResponses.ResponseStatus = item.HasSubQue;
 
-                            _diagnosisDetails.QuestionRefCode = Convert.ToString(QueId.QueId);
-                            _diagnosisDetails.QuestionTitle = QueId.Question;
-                            _diagnosisDetails.DiagnosisName = QueId.Details;
-                            _diagnosisDetails.DiagnosisDate = Convert.ToString(QueId.UpdatedDateTime.Date.ToString("dd-MM-yyyy"));
-                            _diagnosisDetails.Consultationdate = Convert.ToString(QueId.CreatedDateTime.Date.ToString("dd-MM-yyyy"));
-                            _diagnosisDetails.LineofTreatment = QueId.FeedbackType;
-                            _diagnosisDetails.TreatmentDetails = QueId.ExaminationType;
-
-
-                            listdiagnosisDetails.Add(_diagnosisDetails);
-
-
-
+                            }
+                        }
+                        if(item.MainQueClientCode != null)
+                        {
+                            _MerDtAnswerResponses.Add(merDtAnswerResponses);
                         }
                     }
-
-
-
-
-
+                    
+                    MerDtAnswerResponses merdtAnswerResponses = new MerDtAnswerResponses();
+                    
                     _HDFCERGODigitalInformation.MerDtAnswerResponses = _MerDtAnswerResponses;
                     _HDFCERGODigitalInformation.DiagnosisDetails = listdiagnosisDetails;
 
                     data = JsonConvert.SerializeObject(_HDFCERGODigitalInformation);
+
                     BusinessCorelationId = apptdetails.PolicyRefNo + DateTime.Now.ToString("dd-MM-yyyy") + Convert.ToString(DateTimeOffset.Now.ToUnixTimeMilliseconds());
-
-
-
                     List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
                     headers.Add(new KeyValuePair<string, string>("userName", "mangrokr"));
                     headers.Add(new KeyValuePair<string, string>("userPassword", "Synoverge@123"));
@@ -1929,7 +1908,7 @@ namespace APICallScheduler.Controllers
                     responseValue = responseValue.Replace(@"[", "").Replace(@"]", "");
                     if (json == "Unable to connect to the remote server")
                     {
-                        SBLL.updateHDFCERGODigitalDataResponse(apptdetails.AppointmentId, responseValue);
+                        SBLL.updateHDFCERGODigitalDataResponse(apptdetails.TeleProposerId, responseValue);
                     }
                     else
                     {
@@ -1938,20 +1917,20 @@ namespace APICallScheduler.Controllers
                         {
                             // BAGICStatusUpdate(apptdetails.AppointmentId, "STATUSUPDATE_MER");
                         }
-                        SBLL.updateHDFCERGODigitalDataResponse(apptdetails.AppointmentId, HDFCERGOResponse.Message);
+                        SBLL.updateHDFCERGODigitalDataResponse(apptdetails.TeleProposerId, HDFCERGOResponse.Message);
 
                     }
 
-                    SBLL.SaveServiceRequest("HDFC ERGO Health Insurance", "", "", "HDFCERGOTELEMerForm", apptdetails.AppointmentId.ToString(), "AppointmentId", "JSON", data, "JSON", json, "SERVICE", BusinessCorelationId);
-                    SBLL.GetRHIData(apptdetails.AppointmentId, null, null, apptdetails.AppointmentId, "APPOINTMENTID", "DIGITALAPI", data, json, "TELEINSERTALL");
+                    SBLL.SaveServiceRequest("HDFC ERGO Health Insurance", "", "", "HDFCERGOTELEMerForm", apptdetails.TeleProposerId.ToString(), "TeleProposerId", "JSON", data, "JSON", json, "SERVICE", BusinessCorelationId);
+                    SBLL.GetRHIData(apptdetails.TeleProposerId, null, null, apptdetails.TeleProposerId, "TeleProposerId", "DIGITALAPI", data, json, "TELEINSERTALL");
 
                 }
 
 
             }
             catch (Exception ex)
-            {
-                SBLL.SaveServiceRequest("HDFC ERGO Health Insurance", "", "", "HDFCERGOTELEMerForm", AppointmentId, "AppointmentId", "JSON", data, "JSON", json, "SERVICE", BusinessCorelationId);
+             {
+                SBLL.SaveServiceRequest("HDFC ERGO Health Insurance", "", "", "HDFCERGOTELEMerForm", TeleProposerId, "TeleProposerId", "JSON", data, "JSON", json, "SERVICE", BusinessCorelationId);
 
                 json = ex.Message.Replace("'", "\\'");
                 ex.GetBaseException();

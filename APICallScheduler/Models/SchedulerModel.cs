@@ -531,6 +531,7 @@ namespace APICallScheduler.Models
 
     public class MERFormModel
     {
+        //public List<Filelststele> Filelststele = new List<Filelststele>();
         public List<Filelsts> Filelst = new List<Filelsts>();
         public List<AppointmentDetails> appointmentlst = new List<AppointmentDetails>();
         public List<FeedbackMER> feedBackMerlst = new List<FeedbackMER>();
@@ -546,11 +547,25 @@ namespace APICallScheduler.Models
     public class Filelsts
     {
         public long AppointmentId { get; set; }
+        public long TeleProposerId { get; set; }
         public string FileContent { get; set; }
         public string FileName { get; set; }
-
+        public string file_name { get; set; }
+        public string FileSavePath { get; set; }
+        public int ProposerReferenceId { get; set; }
         public string FilePath { get; set; }
         public string PolicyRefNo { get; set; }
+
+    }
+    public class Filelststele
+    {
+      
+        public string FileContent { get; set; }
+        public string FileName { get; set; }
+     
+        public int ProposerReferenceId { get; set; }
+        public string FilePath { get; set; }
+  
 
     }
 
@@ -692,7 +707,7 @@ namespace APICallScheduler.Models
         public string MemberId { get; set; }
         public string PolicyNo { get; set; }
 
-      
+      public int ProposerReferenceId { get; set; }
         public string FileContent { get; set; }
         public string FileName { get; set; }
 
@@ -734,8 +749,12 @@ namespace APICallScheduler.Models
     {
         public long FeedbackMERId { get; set; }
         public long AppointmentId { get; set; }
+        public long QuestionId { get; set; }
         public long QueId { get; set; }
         public string Question { get; set; }
+        public string QuestionsName { get; set; }
+        public string HasSubQue { get; set; }
+       // public strig Questions Name {get; set;}
         public int FeedbackMEROptionId { get; set; }
         public string MainQueClientCode { get; set; }
         public string Text { get; set; }
@@ -888,12 +907,10 @@ namespace APICallScheduler.Models
 
     public class HDFCERGODigitalInformation
     {
-        public string appointmentId { get; set; }
-        public string PolicyRefNo { get; set; }
+        public int InsuredDetailId { get; set; }
         public string FileContent { get; set; }
         public string FileName { get; set; }
-        public string imageBytes { get; set; }
-       
+
         public List<MerDtAnswerResponses> MerDtAnswerResponses { get; set; }
         public List<DiagnosisDetails> DiagnosisDetails { get; set; }
 

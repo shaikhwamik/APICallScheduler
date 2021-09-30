@@ -757,18 +757,18 @@ namespace APICallScheduler.DAL
                 parameters.Add("@ClientId", ClientId);
                 parameters.Add("@Minutes", Minutes);
                 var data = MyConn.QueryMultiple("UspGetHDFCERGOTELEMERAppointments", parameters, commandType: CommandType.StoredProcedure);
-                model.Filelst = data.Read<Filelsts>().OrderBy(m => m.AppointmentId).ToList();
+                model.Filelst = data.Read<Filelsts>().OrderBy(m => m.ProposerReferenceId).ToList();
                 model.appointmentlst = data.Read<AppointmentDetails>().OrderBy(m => m.TeleProposerId).ToList();
                 model.feedbackMERQuestionAnswerlst = data.Read<FeedbackMERQuestionAnswer>().OrderBy(m => m.QueId).ToList();
                 model.FeedbackQuestionsMERlst = data.Read<FeedbackQuestionsMER>().OrderBy(m => m.QueId).ToList();
 
                 //model.AppointmentTestvalueslst = data.Read<AppointmentTestvalues>().ToList();
                 //model.AptCtmtReportDetaillst = data.Read<AptCtmtReportDetail>().ToList();
-                model.AppointmentTestDetails = data.Read<ApttTestDetails>().ToList();
+               // model.AppointmentTestDetails = data.Read<ApttTestDetails>().ToList();
 
                 return model;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
