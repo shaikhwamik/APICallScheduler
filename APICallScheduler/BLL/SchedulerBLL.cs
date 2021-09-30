@@ -867,28 +867,7 @@ namespace APICallScheduler.BLL
             }
         }
 
-        public List<TPAInformation> GetTELEAppointmentDetails()
-        {
-            try
-            {
-                List<TPAInformation> List = new List<TPAInformation>();
-                DataTable dt = DAL.GetTELEAppointmentDetails();
-                List = dt.AsEnumerable().ToList().
-                     ConvertAll(x => new TPAInformation
-                     {
-
-                         MAHSRequestId = x.Field<Int32>("MAHSRequestId"),
-                         TestCategory = x.Field<string>("TestCategory"),
-                         TPAStatus = x.Field<string>("TPAStatus")
-                     });
-                return List;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
+        
     }
 
 

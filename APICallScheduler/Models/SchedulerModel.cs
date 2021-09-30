@@ -656,6 +656,7 @@ namespace APICallScheduler.Models
         public string ChildClientCode { get; set; }
     }
 
+
     public class FeedbackQueOptMappingMER
     {
         public int FeedbackQueOptMappingMERId { get; set; }
@@ -986,6 +987,7 @@ namespace APICallScheduler.Models
         public int ResponseType { get; set; }
         public object Name { get; set; }
         public object MessageCode { get; set; }
+      
     }
 
 
